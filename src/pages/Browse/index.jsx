@@ -20,7 +20,7 @@ import React, { useState, useEffect } from "react";
 import arrayToTree from "array-to-tree";
 
 // Widgets
-import { InputContainer, Alert, Spinner } from "../../components/Widgets";
+import { InputContainer, Alert } from "../../components/Widgets";
 
 // Tree View of folders
 import TreeContainer from "../../components/TreeContainer";
@@ -76,11 +76,16 @@ const Browse = () => {
   const [folderList, setFolderList] = useState();
 
   // State Variables for handling Error Boundaries
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(initialMessage);
   const [showMessage, setShowMessage] = useState(false);
 
   useEffect(() => {
+    setMessage({
+      type: "success",
+      text: "Loading...",
+    });
+    setShowMessage(true);
     getBrowseData(browseData).then((res) => {
       setBrowseDataList(res.res);
       const arr = [];
@@ -91,7 +96,11 @@ const Browse = () => {
         });
       }
       setPagesOptions(arr);
-      setLoading(false);
+      // setMessage({
+      //   type: "danger",
+      //   text: "Error occured in fetching folder list",
+      // });
+      setShowMessage(false);
     });
   }, [browseData]);
 
@@ -136,13 +145,6 @@ const Browse = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <Spinner animation="border" role="status">
-        <span className="sr-only">Loading...</span>
-      </Spinner>
-    );
-  }
   return (
     <>
       {showMessage && (
